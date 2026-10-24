@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ app_name }}</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="shell">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-badge">FDE PROJECT</div>
+
+                <h1>IT Support<br>Agentic RAG</h1>
+
+                <p class="muted">
+                    Private company knowledge first.
+                    External web search is used when evidence is weak.
+                </p>
+            </div>
+
+            <!-- AGENT WORKFLOW -->
+            <div class="workflow-card">
+                <h3>LangGraph Workflow</h3>
+
+                <div class="flow-step">
+                    <span>01</span> Route question
+                </div>
+
+                <div class="flow-step">
+                    <span>02</span> Retrieve private KB
+                </div>
+
+                <div class="flow-step">
+                    <span>03</span> Grade evidence
+                </div>
+
+                <div class="flow-step">
+                    <span>04</span> Web fallback if weak
+                </div>
+
+                <div class="flow-step">
+                    <span>05</span> Rewrite and retry
+                </div>
+
+                <div class="flow-step">
+                    <span>06</span> Generate grounded answer
+                </div>
+            </div>
+
+            <button id="openUpload" class="secondary-btn" type="button">
+                + Add Company Document
+            </button>
+
+            <div class="sidebar-footer">
+                <span class="status-dot"></span>
+                Knowledge system ready
+            </div>
+        </aside>
+
+
+        <!-- MAIN CHAT AREA -->
+        <main class="main">
+
+            <header class="topbar">
+                <div class="topbar-brand">
+                    <span class="status-dot"></span>
+                    <span>Enterprise Knowledge Copilot</span>
+                </div>
+
+                <span class="pill">AGENTIC RAG</span>
+            </header>
+
+
+            <!-- CHAT MESSAGES -->
+            <section id="chat" class="chat-area">
+
+                <div class="welcome-panel">
+                    <div class="welcome-icon">✦</div>
+
+                    <p class="eyebrow">YOUR IT SUPPORT ASSISTANT</p>
+
+                    <h2>How can I help you today?</h2>
+
+                    <p class="welcome-description">
+                        Ask questions about company IT policies, troubleshooting,
+                        account access, network connectivity, and more.
+                    </p>
+                </div>
+
+                <div class="message assistant">
+                    <div class="avatar">AI</div>
+
+                    <div class="bubble">
+                        <strong>Welcome to IT Support Copilot!</strong>
+
+                        <p>
+                            I can search your company's knowledge base to help
+                            answer IT questions using relevant documentation.
+                        </p>
+
+                        <p>
+                            Try asking about VPN access, password resets,
+                            or company IT policies.
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- CHAT INPUT -->
+            <section class="composer-wrap">
+
+                <div class="examples">
+                    <button class="example" type="button">
+                        How do I connect to the company VPN?
+                    </button>
+
+                    <button class="example" type="button">
+                        What is our password reset policy?
+                    </button>
+
+                    <button class="example" type="button">
+                        How do I troubleshoot network issues?
+                    </button>
+                </div>
+
+                <form id="chatForm" class="composer">
+                    <textarea id="question" rows="2" placeholder="Ask an IT support question..."
+                        aria-label="Your IT support question" required></textarea>
+
+                    <button type="submit" class="send-btn">
+                        Ask Agent ↗
+                    </button>
+                </form>
+
+                <p class="composer-note">
+                    AI-generated responses can contain errors.
+                    Verify critical IT procedures with your support team.
+                </p>
+
+            </section>
+
+        </main>
+
+
+        <!-- RIGHT AGENT TRACE PANEL -->
+        <aside class="trace-panel">
+
+            <div class="trace-header">
+                <div>
+                    <p class="eyebrow">OBSERVABILITY</p>
+                    <h2>Agent Trace</h2>
+                </div>
+
+                <span class="trace-indicator"></span>
+            </div>
+
+            <p class="muted">
+                Follow the agent's workflow as it processes your request.
+            </p>
+
+            <div id="trace" class="trace-list">
+                <div class="empty">
+                    <div class="empty-icon">◎</div>
+
+                    <strong>No request yet</strong>
+
+                    <p>
+                        Submit a question to see retrieval results
+                        and agent decisions here.
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- FINAL SOURCE -->
+            <div class="source-box">
+                <span>FINAL SOURCE</span>
+                <strong id="sourceUsed">Waiting for query</strong>
+            </div>
+
+
+            <!-- SYSTEM INFORMATION -->
+            <div class="system-card">
+                <h3>System Overview</h3>
+
+                <div class="system-row">
+                    <span>Knowledge base</span>
+                    <span class="system-value">Pinecone</span>
+                </div>
+
+                <div class="system-row">
+                    <span>Orchestration</span>
+                    <span class="system-value">LangGraph</span>
+                </div>
+
+                <div class="system-row">
+                    <span>API</span>
+                    <span class="system-value">FastAPI</span>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- DOCUMENT UPLOAD MODAL -->
+    <div id="uploadModal" class="modal hidden">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+                <div>
+                    <p class="eyebrow">KNOWLEDGE MANAGEMENT</p>
+                    <h2>Add Company Document</h2>
+                </div>
+
+                <button id="closeUpload" type="button" aria-label="Close upload window">×</button>
+            </div>
+
+            <p class="muted">
+                Upload a company document to process its text, generate
+                embeddings, and index relevant chunks in Pinecone.
+            </p>
+
+            <label for="adminKey">Admin API key</label>
+
+            <input id="adminKey" type="password" placeholder="Enter admin API key" autocomplete="off">
+
+            <label for="fileInput">Choose a document</label>
+
+            <input id="fileInput" type="file" accept=".pdf,.txt,.md,.docx">
+
+            <p class="upload-hint">
+                Supported formats: PDF, TXT, Markdown, DOCX
+            </p>
+
+            <button id="uploadBtn" class="send-btn full" type="button">
+                Index Document
+            </button>
+
+            <div id="uploadStatus" class="upload-status" role="status" aria-live="polite"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FRONTEND JAVASCRIPT -->
+    <script src="/static/js/app.js"></script>
+
+</body>
+
+</html>
