@@ -1,4 +1,9 @@
-from app.core.config import get_settings
-settings= get_settings()
+from app.services.ingestion import chunk_documents
+import chunk
+from app.services.ingestion import load_file
+from pathlib import Path
+from app.rag.vectorstore import add_documents
 
-print('name: ',{settings.app_name})
+docs=load_file(Path("/Users/saurabhrai/Desktop/IT_SUPPORT_COPILOT/data/sample_kb/company_it_handbook.md"))
+chunks=chunk_documents(docs)
+add_documents(chunks)
